@@ -1,312 +1,448 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
   <title>VCRM – منصة الغرف الصوتية</title>
-  <meta name="description" content="منصة VCRM للغرف الصوتية التفاعلية – دردش، استمع، وشارك مع أصدقائك في غرف حية." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/main.css" />
+  <meta name="description" content="VCRM – منصة الغرف الصوتية التفاعلية مع نظام ميكروفون متكامل"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/main.css"/>
 </head>
 <body>
 
-  <!-- ========== SPLASH SCREEN ========== -->
-  <div id="splash" class="splash">
-    <div class="splash-logo">
-      <div class="splash-icon">🎙️</div>
-      <h1 class="splash-title">VCRM</h1>
-      <p class="splash-sub">منصة الغرف الصوتية</p>
-      <div class="splash-bar"><div class="splash-fill"></div></div>
+<!-- ======== SPLASH ======== -->
+<div id="splash" class="splash">
+  <div class="splash-inner">
+    <div class="splash-mic">🎙️</div>
+    <h1>VCRM</h1>
+    <p>منصة الغرف الصوتية</p>
+    <div class="splash-bar"><div class="splash-fill"></div></div>
+  </div>
+</div>
+
+<!-- ======== LOGIN ======== -->
+<div id="login-modal" class="overlay-full hidden">
+  <div class="login-card">
+    <div class="login-icon">🎙️</div>
+    <h2>VCRM</h2>
+    <p class="muted">سجل دخولك للبدء</p>
+    <input id="login-username" type="text" placeholder="اسم المستخدم" autocomplete="off"/>
+    <div class="avatar-picker" id="avatar-picker">
+      <span class="ap-label">اختر أفاتار:</span>
+      <div class="ap-grid" id="ap-grid"></div>
+    </div>
+    <button id="login-btn" class="btn-primary btn-lg">دخول 🚀</button>
+    <p class="login-note">لا يُطلب تسجيل عبر إيميل</p>
+  </div>
+</div>
+
+<!-- ======== MAIN APP ======== -->
+<div id="app" class="app hidden">
+
+  <!-- TOP BAR -->
+  <header class="top-bar">
+    <div class="top-bar-left">
+      <button class="avatar-btn" id="top-avatar-btn">
+        <span id="top-avatar">😊</span>
+        <span class="lv-badge" id="top-lv">1</span>
+      </button>
+    </div>
+    <nav class="top-tabs" id="top-tabs">
+      <button class="ttab active" data-ttab="explore">Explore</button>
+      <button class="ttab" data-ttab="hot">Hot 🔥</button>
+      <button class="ttab" data-ttab="my">My</button>
+    </nav>
+    <button class="icon-btn" id="top-search-btn">🔍</button>
+  </header>
+
+  <!-- SEARCH BAR (hidden by default) -->
+  <div class="search-bar hidden" id="search-bar">
+    <input type="text" id="search-input" placeholder="ابحث عن غرفة..."/>
+    <button id="search-close">✕</button>
+  </div>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="main-area">
+
+    <!-- === EXPLORE TAB === -->
+    <section class="tab-page active" id="tab-explore">
+      <div class="cat-tabs" id="cat-tabs">
+        <button class="ctab active" data-cat="all">الكل</button>
+        <button class="ctab" data-cat="hot">🔥 رائجة</button>
+        <button class="ctab" data-cat="music">🎵 موسيقى</button>
+        <button class="ctab" data-cat="pk">⚔️ PK</button>
+        <button class="ctab" data-cat="game">🎮 ألعاب</button>
+      </div>
+      <div class="rooms-grid" id="rooms-grid"></div>
+    </section>
+
+    <!-- === HOT TAB === -->
+    <section class="tab-page" id="tab-hot">
+      <div class="hot-header">🔥 الغرف الأكثر نشاطاً</div>
+      <div class="rooms-grid" id="hot-grid"></div>
+    </section>
+
+    <!-- === MY TAB === -->
+    <section class="tab-page" id="tab-my">
+      <button class="create-room-banner" id="btn-create-room">
+        <span class="cr-plus">+</span>
+        <span>Create my room</span>
+      </button>
+      <div class="my-tabs">
+        <button class="mytab active" data-my="recent">Recently</button>
+        <button class="mytab" data-my="joined">Joined</button>
+        <button class="mytab" data-my="following">Following</button>
+      </div>
+      <div class="my-rooms-list" id="my-rooms-list">
+        <div class="empty-state">
+          <div class="empty-icon">🏠</div>
+          <p>You haven't visited any room recently.</p>
+          <button class="btn-gold" id="btn-find-rooms">Go Find Rooms</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="bnav-btn" data-bnav="events">
+      <span class="bnav-ico">🎁</span>
+      <span class="bnav-lbl">Events</span>
+      <span class="badge">2</span>
+    </button>
+    <button class="bnav-btn" data-bnav="battle">
+      <span class="bnav-ico">⚔️</span>
+      <span class="bnav-lbl">Battle</span>
+    </button>
+    <button class="bnav-btn active" data-bnav="chat">
+      <span class="bnav-ico bnav-chat">💬</span>
+      <span class="bnav-lbl">Chat</span>
+    </button>
+    <button class="bnav-btn" data-bnav="social">
+      <span class="bnav-ico">👥</span>
+      <span class="bnav-lbl">Social</span>
+      <span class="badge red">1</span>
+    </button>
+  </nav>
+
+</div>
+
+<!-- ================================================================
+     VOICE ROOM
+     ================================================================ -->
+<div id="room-wrapper" class="room-wrapper hidden">
+
+  <!-- Room BG -->
+  <div class="room-bg" id="room-bg"></div>
+
+  <!-- Room Header -->
+  <div class="room-header">
+    <div class="rh-left">
+      <button class="rh-back" id="rh-back">←</button>
+      <div class="rh-user">
+        <span class="rh-avatar" id="rh-avatar">😊</span>
+        <div>
+          <div class="rh-username" id="rh-username">user_12345678</div>
+          <div class="rh-uid" id="rh-uid">ID: 12345678</div>
+        </div>
+        <div class="rh-coins"><span>💰</span><span id="rh-coins">0</span></div>
+      </div>
+    </div>
+    <div class="rh-right">
+      <button class="rh-btn" id="rh-more">···</button>
+      <button class="rh-btn rh-power" id="rh-power">⏻</button>
     </div>
   </div>
 
-  <!-- ========== APP SHELL ========== -->
-  <div id="app" class="app hidden">
-
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-logo">
-        <span class="sidebar-icon">🎙️</span>
-        <span class="sidebar-name">VCRM</span>
-      </div>
-      <nav class="sidebar-nav">
-        <button class="nav-btn active" data-page="rooms" id="nav-rooms">
-          <span class="nav-icon">🏠</span><span class="nav-label">الغرف</span>
-        </button>
-        <button class="nav-btn" data-page="ranking" id="nav-ranking">
-          <span class="nav-icon">🏆</span><span class="nav-label">المتصدرون</span>
-        </button>
-        <button class="nav-btn" data-page="gifts" id="nav-gifts">
-          <span class="nav-icon">🎁</span><span class="nav-label">الهدايا</span>
-        </button>
-        <button class="nav-btn" data-page="wallet" id="nav-wallet">
-          <span class="nav-icon">💰</span><span class="nav-label">المحفظة</span>
-        </button>
-        <button class="nav-btn" data-page="profile" id="nav-profile">
-          <span class="nav-icon">👤</span><span class="nav-label">ملفي</span>
-        </button>
-      </nav>
-      <div class="sidebar-user">
-        <div class="user-avatar" id="sidebar-avatar">😎</div>
-        <div class="user-info">
-          <div class="user-name" id="sidebar-name">أحمد</div>
-          <div class="user-coins"><span>🪙</span><span id="sidebar-coins">12,500</span></div>
-        </div>
-      </div>
-    </aside>
-
-    <!-- MAIN CONTENT -->
-    <main class="main-content">
-
-      <!-- ===== PAGE: ROOMS LIST ===== -->
-      <section class="page active" id="page-rooms">
-        <div class="page-header">
-          <h2 class="page-title">الغرف الصوتية</h2>
-          <div class="header-actions">
-            <button class="btn-primary" id="btn-create-room">+ إنشاء غرفة</button>
-            <div class="search-box">
-              <input type="text" placeholder="بحث عن غرفة..." id="room-search" />
-              <span>🔍</span>
-            </div>
-          </div>
-        </div>
-        <div class="category-tabs" id="category-tabs">
-          <button class="cat-tab active" data-cat="all">الكل</button>
-          <button class="cat-tab" data-cat="hot">🔥 رائجة</button>
-          <button class="cat-tab" data-cat="new">✨ جديدة</button>
-          <button class="cat-tab" data-cat="pk">⚔️ PK</button>
-          <button class="cat-tab" data-cat="game">🎮 ألعاب</button>
-          <button class="cat-tab" data-cat="music">🎵 موسيقى</button>
-        </div>
-        <div class="rooms-grid" id="rooms-grid"></div>
-      </section>
-
-      <!-- ===== PAGE: RANKING ===== -->
-      <section class="page" id="page-ranking">
-        <div class="page-header">
-          <h2 class="page-title">🏆 لوحة المتصدرين</h2>
-        </div>
-        <div class="rank-tabs">
-          <button class="rank-tab active" data-rank="richest">أغنى المستخدمين</button>
-          <button class="rank-tab" data-rank="hosts">أفضل المضيفين</button>
-          <button class="rank-tab" data-rank="rooms">أشعل الغرف</button>
-        </div>
-        <div class="ranking-list" id="ranking-list"></div>
-      </section>
-
-      <!-- ===== PAGE: GIFTS STORE ===== -->
-      <section class="page" id="page-gifts">
-        <div class="page-header">
-          <h2 class="page-title">🎁 متجر الهدايا</h2>
-        </div>
-        <div class="gifts-grid" id="gifts-store-grid"></div>
-      </section>
-
-      <!-- ===== PAGE: WALLET ===== -->
-      <section class="page" id="page-wallet">
-        <div class="page-header">
-          <h2 class="page-title">💰 المحفظة</h2>
-        </div>
-        <div class="wallet-card">
-          <div class="wallet-balance">
-            <span class="wallet-label">رصيدك الحالي</span>
-            <div class="wallet-amount"><span>🪙</span><span id="wallet-coins">12,500</span></div>
-          </div>
-          <div class="wallet-diamonds">
-            <span class="wallet-label">الماس</span>
-            <div class="wallet-amount"><span>💎</span><span id="wallet-diamonds">350</span></div>
-          </div>
-        </div>
-        <h3 class="section-title">شحن الرصيد</h3>
-        <div class="recharge-grid" id="recharge-grid"></div>
-        <h3 class="section-title">سجل المعاملات</h3>
-        <div class="tx-list" id="tx-list"></div>
-      </section>
-
-      <!-- ===== PAGE: PROFILE ===== -->
-      <section class="page" id="page-profile">
-        <div class="profile-hero">
-          <div class="profile-cover"></div>
-          <div class="profile-avatar-wrap">
-            <div class="profile-avatar" id="profile-avatar-display">😎</div>
-            <div class="profile-level-badge" id="profile-level-badge">VIP 3</div>
-          </div>
-          <div class="profile-details">
-            <h3 id="profile-username">أحمد السلام</h3>
-            <p id="profile-id">ID: #VCR-10021</p>
-            <div class="profile-stats">
-              <div class="stat"><span class="stat-val" id="stat-gifts">1,240</span><span class="stat-lbl">هدايا أُرسلت</span></div>
-              <div class="stat"><span class="stat-val" id="stat-hours">320</span><span class="stat-lbl">ساعة في الغرف</span></div>
-              <div class="stat"><span class="stat-val" id="stat-friends">85</span><span class="stat-lbl">صديق</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="profile-actions">
-          <button class="btn-primary" id="btn-edit-profile">✏️ تعديل الملف</button>
-          <button class="btn-outline" id="btn-logout">🚪 تسجيل الخروج</button>
-        </div>
-      </section>
-
-    </main>
+  <!-- Decorative top stats -->
+  <div class="room-stats">
+    <div class="rs-trophy">🏆 <span id="rs-rank">0</span> ›</div>
+    <div class="rs-members">👤 <span id="rs-members">1</span></div>
   </div>
 
-  <!-- ========== VOICE ROOM MODAL ========== -->
-  <div id="room-modal" class="modal-overlay hidden">
-    <div class="room-container">
+  <!-- MIC SEATS AREA -->
+  <div class="mic-area" id="mic-area"></div>
 
-      <!-- Room Header -->
-      <div class="room-header" id="room-header-bg">
-        <div class="room-header-info">
-          <button class="room-back-btn" id="room-back-btn">←</button>
-          <div class="room-title-wrap">
-            <h3 class="room-title" id="modal-room-title">غرفة النجوم ⭐</h3>
-            <div class="room-meta">
-              <span id="modal-room-id">ID: #1042</span>
-              <span class="room-type-badge" id="modal-room-type">🔥 رائجة</span>
-            </div>
-          </div>
-        </div>
-        <div class="room-header-right">
-          <div class="room-online"><span>👥</span><span id="modal-room-online">128</span></div>
-          <button class="room-share-btn">🔗</button>
-          <button class="room-more-btn" id="room-more-btn">⋮</button>
-        </div>
+  <!-- Announcement -->
+  <div class="announcement-bar" id="announcement-bar">
+    <span class="ann-icon">📢</span>
+    <span class="ann-text" id="ann-text">Add your room announcement here.</span>
+    <button class="ann-edit" id="ann-edit">✏️</button>
+  </div>
+
+  <!-- Scrolling gift banner -->
+  <div class="gift-banner hidden" id="gift-banner">
+    <div class="gb-inner" id="gb-inner"></div>
+  </div>
+
+  <!-- Gift animation layer -->
+  <div class="gift-anim-layer" id="gift-anim-layer"></div>
+
+  <!-- Room background art (city skyline illustration) -->
+  <div class="room-art"></div>
+
+  <!-- Right-side shortcuts -->
+  <div class="room-shortcuts">
+    <button class="shortcut-btn" id="sc-treasure">
+      <span>🪙</span><small>Treasure</small>
+    </button>
+    <button class="shortcut-btn" id="sc-activity">
+      <span>🎯</span><small>Activity</small>
+    </button>
+    <button class="shortcut-btn sc-msg" id="sc-messages">
+      <span>💬</span><small>Messages</small>
+      <span class="badge">1</span>
+    </button>
+    <button class="shortcut-btn" id="sc-music">
+      <span>🎵</span><small>Music</small>
+    </button>
+  </div>
+
+  <!-- Chat area -->
+  <div class="room-chat" id="room-chat"></div>
+
+  <!-- Bottom toolbar -->
+  <div class="room-toolbar">
+    <button class="rt-btn" id="rt-speaker" title="سماعة">🔊</button>
+    <div class="rt-chat-wrap">
+      <input type="text" class="rt-chat-input" id="rt-chat-input" placeholder="Say something"/>
+    </div>
+    <button class="rt-btn" id="rt-gamepad" title="ألعاب">🕹️</button>
+    <button class="rt-btn rt-gift-btn" id="rt-gift" title="هدية">🎁</button>
+  </div>
+
+</div>
+
+<!-- ================================================================
+     PANELS & MODALS
+     ================================================================ -->
+
+<!-- GIFT PANEL -->
+<div id="gift-panel" class="bottom-panel hidden">
+  <div class="bp-card">
+    <div class="bp-header">
+      <h3>🎁 الهدايا</h3>
+      <button class="bp-close" id="gift-panel-close">✕</button>
+    </div>
+    <div class="gift-tabs">
+      <button class="gtab active" data-gtab="popular">شائعة</button>
+      <button class="gtab" data-gtab="luxury">فخمة</button>
+      <button class="gtab" data-gtab="special">مميزة</button>
+    </div>
+    <div class="gifts-grid" id="gifts-grid"></div>
+    <div class="gift-footer">
+      <div class="gf-bal">🪙 <span id="gf-bal">0</span></div>
+      <div class="qty-row">
+        <button class="qty-btn" id="qty-m">−</button>
+        <span id="qty-val">1</span>
+        <button class="qty-btn" id="qty-p">+</button>
       </div>
-
-      <!-- PK Bar (hidden by default) -->
-      <div class="pk-bar hidden" id="pk-bar">
-        <div class="pk-side pk-red">
-          <span class="pk-name" id="pk-name-red">غرفة النجوم</span>
-          <div class="pk-score" id="pk-score-red">0</div>
-        </div>
-        <div class="pk-center">
-          <div class="pk-icon">⚔️</div>
-          <div class="pk-timer" id="pk-timer">05:00</div>
-        </div>
-        <div class="pk-side pk-blue">
-          <div class="pk-score" id="pk-score-blue">0</div>
-          <span class="pk-name" id="pk-name-blue">غرفة القمر</span>
-        </div>
-        <div class="pk-progress-wrap">
-          <div class="pk-progress" id="pk-progress"></div>
-        </div>
-      </div>
-
-      <!-- Host Seat -->
-      <div class="host-seat-area">
-        <div class="host-seat" id="host-seat">
-          <div class="host-avatar" id="host-avatar">👑</div>
-          <div class="host-wave" id="host-wave"></div>
-          <div class="host-name" id="host-name">المضيف</div>
-          <div class="host-level">Lv.15</div>
-        </div>
-      </div>
-
-      <!-- 8 Mic Seats -->
-      <div class="mic-seats-grid" id="mic-seats-grid"></div>
-
-      <!-- Gift Animation Layer -->
-      <div class="gift-anim-layer" id="gift-anim-layer"></div>
-
-      <!-- Broadcast Banner -->
-      <div class="broadcast-banner hidden" id="broadcast-banner">
-        <span id="broadcast-text"></span>
-      </div>
-
-      <!-- Chat Area -->
-      <div class="chat-area" id="chat-area"></div>
-
-      <!-- Bottom Toolbar -->
-      <div class="room-toolbar">
-        <div class="chat-input-wrap">
-          <input type="text" class="chat-input" id="chat-input" placeholder="اكتب رسالتك..." />
-          <button class="send-btn" id="send-btn">إرسال</button>
-        </div>
-        <div class="toolbar-actions">
-          <button class="tool-btn" id="btn-mic" title="الميكروفون">🎤</button>
-          <button class="tool-btn" id="btn-gift" title="إرسال هدية">🎁</button>
-          <button class="tool-btn" id="btn-emoji" title="إيموجي">😊</button>
-          <button class="tool-btn" id="btn-music" title="موسيقى">🎵</button>
-          <button class="tool-btn" id="btn-pk" title="PK">⚔️</button>
-        </div>
-      </div>
-
+      <button class="btn-gold" id="btn-send-gift">إرسال 🎁</button>
     </div>
   </div>
+</div>
 
-  <!-- ========== GIFT PANEL ========== -->
-  <div id="gift-panel" class="panel-overlay hidden">
-    <div class="gift-panel">
-      <div class="panel-header">
-        <h3>🎁 أرسل هدية</h3>
-        <button class="panel-close" id="gift-panel-close">✕</button>
-      </div>
-      <div class="gift-tabs">
-        <button class="gift-tab active" data-gtab="popular">شائعة</button>
-        <button class="gift-tab" data-gtab="luxury">فخمة</button>
-        <button class="gift-tab" data-gtab="special">مميزة</button>
-      </div>
-      <div class="gifts-panel-grid" id="gifts-panel-grid"></div>
-      <div class="gift-footer">
-        <div class="gift-balance">🪙 <span id="gift-balance-val">12,500</span></div>
-        <div class="gift-qty-wrap">
-          <button class="qty-btn" id="qty-minus">−</button>
-          <span id="gift-qty">1</span>
-          <button class="qty-btn" id="qty-plus">+</button>
+<!-- GAME PANEL (Fruit Fight, Fortune Chest, etc.) -->
+<div id="game-panel" class="bottom-panel hidden">
+  <div class="bp-card">
+    <div class="bp-header">
+      <h3>🕹️ ألعاب الغرفة</h3>
+      <button class="bp-close" id="game-panel-close">✕</button>
+    </div>
+    <div class="games-grid">
+      <button class="game-card" id="game-vote"><span>🗳️</span><small>Vote</small></button>
+      <button class="game-card" id="game-fruit"><span>🍎</span><small>Fruit Fight</small></button>
+      <button class="game-card" id="game-chest"><span>📦</span><small>Fortune Chest</small></button>
+      <button class="game-card" id="game-wheel"><span>🎡</span><small>Random Wheel</small></button>
+      <button class="game-card" id="game-pk"><span>⚔️</span><small>PK Battle</small></button>
+      <button class="game-card" id="game-bomb"><span>💣</span><small>Bomb Game</small></button>
+    </div>
+  </div>
+</div>
+
+<!-- ROOM SETTINGS PANEL -->
+<div id="settings-panel" class="overlay-full hidden">
+  <div class="settings-card">
+    <div class="settings-header">
+      <h3>Settings</h3>
+      <button class="bp-close" id="settings-close">✕</button>
+    </div>
+
+    <!-- Profile section -->
+    <div class="settings-section">
+      <div class="settings-profile-row">
+        <div class="settings-avatar" id="settings-avatar">😊</div>
+        <div class="settings-profile-info">
+          <div class="settings-row arrow" id="sr-username">
+            <span class="sr-label" id="sr-uname-val">user_12345678</span>
+            <span>›</span>
+          </div>
+          <div class="settings-row arrow" id="sr-tag">
+            <span class="sr-label">Tag</span>
+            <span>›</span>
+          </div>
+          <div class="settings-row arrow" id="sr-announcement">
+            <span class="sr-label" id="sr-ann-val">Add your room announcement here.</span>
+            <span>›</span>
+          </div>
         </div>
-        <button class="btn-send-gift" id="btn-send-gift">إرسال</button>
+      </div>
+    </div>
+
+    <!-- Mic Mode -->
+    <div class="settings-section">
+      <div class="settings-row arrow" id="sr-micmode">
+        <span class="sr-label">Mic Mode</span>
+        <span class="sr-val" id="sr-micmode-val">Chat – 5 Mics</span>
+        <span>›</span>
+      </div>
+      <div class="settings-row arrow" id="sr-micperm">
+        <span class="sr-label">Mic Permission</span>
+        <span class="sr-val">All</span>
+        <span>›</span>
+      </div>
+    </div>
+
+    <!-- Admin & Fee -->
+    <div class="settings-section">
+      <div class="settings-row arrow" id="sr-adminperm">
+        <span class="sr-label">Admin Permission</span>
+        <span>›</span>
+      </div>
+      <div class="settings-row arrow" id="sr-memfee">
+        <span class="sr-label">Membership Fee</span>
+        <span class="sr-val">💎 <span id="sr-fee-val">80</span></span>
+        <span>›</span>
+      </div>
+      <div class="settings-row arrow" id="sr-remove">
+        <span class="sr-label">Remove Members</span>
+        <span>›</span>
+      </div>
+      <div class="settings-row arrow" id="sr-blocklist">
+        <span class="sr-label">Room Entry Blocked List</span>
+        <span>›</span>
+      </div>
+      <div class="settings-row arrow" id="sr-oplog">
+        <span class="sr-label">Operation Records</span>
+        <span>›</span>
+      </div>
+    </div>
+
+    <!-- Daily Bonus -->
+    <div class="settings-section">
+      <div class="settings-row arrow" id="sr-bonus">
+        <span class="sr-label">Daily Bonus</span>
+        <span>›</span>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- ========== EMOJI PANEL ========== -->
-  <div id="emoji-panel" class="panel-overlay hidden">
-    <div class="emoji-panel">
-      <div class="emoji-grid" id="emoji-grid"></div>
+<!-- MIC MODE PICKER -->
+<div id="micmode-modal" class="overlay-full hidden">
+  <div class="micmode-card">
+    <div class="bp-header">
+      <h3>Mic Mode</h3>
+      <button class="bp-close" id="micmode-close">✕</button>
+    </div>
+    <div class="micmode-grid" id="micmode-grid"></div>
+    <button class="btn-gold" id="micmode-confirm">Confirm</button>
+  </div>
+</div>
+
+<!-- ADMIN PERMISSION -->
+<div id="admin-modal" class="overlay-full hidden">
+  <div class="admin-card">
+    <div class="bp-header">
+      <h3>Admin Permission</h3>
+      <button class="bp-close" id="admin-close">✕</button>
+    </div>
+    <div class="admin-section">
+      <div class="toggle-row" id="tr-clock"><span>Allow admin to use Clock</span><div class="toggle" data-key="clock"></div></div>
+      <div class="toggle-row" id="tr-vote"><span>Allow admin to start Vote</span><div class="toggle" data-key="vote"></div></div>
+      <div class="toggle-row" id="tr-fruit"><span>Allow admin to start Fruit Fight</span><div class="toggle" data-key="fruit"></div></div>
+      <div class="toggle-row" id="tr-chest"><span>Allow admin to start Fortune Chest</span><div class="toggle" data-key="chest"></div></div>
+      <div class="toggle-row" id="tr-wheel"><span>Allow admin to start Random Wheel</span><div class="toggle" data-key="wheel"></div></div>
+    </div>
+    <div class="admin-section">
+      <div class="toggle-row" id="tr-miclock"><span>Allow admin to lock/unlock the mic</span><div class="toggle" data-key="miclock"></div></div>
+      <div class="toggle-row" id="tr-theme"><span>Allow admin to change themes</span><div class="toggle" data-key="theme"></div></div>
     </div>
   </div>
+</div>
 
-  <!-- ========== CREATE ROOM MODAL ========== -->
-  <div id="create-room-modal" class="modal-overlay hidden">
-    <div class="create-room-card">
-      <h3>➕ إنشاء غرفة جديدة</h3>
-      <label>اسم الغرفة</label>
-      <input type="text" id="cr-name" placeholder="أدخل اسم الغرفة..." />
-      <label>نوع الغرفة</label>
-      <select id="cr-type">
-        <option value="hot">🔥 رائجة</option>
-        <option value="music">🎵 موسيقى</option>
-        <option value="game">🎮 ألعاب</option>
-        <option value="pk">⚔️ PK</option>
-        <option value="new">✨ عامة</option>
-      </select>
-      <label>وصف الغرفة</label>
-      <input type="text" id="cr-desc" placeholder="وصف مختصر..." />
-      <label>صورة الغرفة (إيموجي)</label>
-      <input type="text" id="cr-emoji" placeholder="🌟" maxlength="2" />
-      <div class="create-room-actions">
-        <button class="btn-outline" id="cr-cancel">إلغاء</button>
-        <button class="btn-primary" id="cr-confirm">إنشاء</button>
-      </div>
+<!-- VOTE GAME -->
+<div id="vote-modal" class="overlay-full hidden">
+  <div class="game-modal-card">
+    <div class="bp-header"><h3>🗳️ التصويت</h3><button class="bp-close" id="vote-close">✕</button></div>
+    <div class="vote-options" id="vote-options"></div>
+    <div class="vote-timer">⏱ <span id="vote-timer">30</span> ثانية</div>
+  </div>
+</div>
+
+<!-- FORTUNE WHEEL -->
+<div id="wheel-modal" class="overlay-full hidden">
+  <div class="game-modal-card">
+    <div class="bp-header"><h3>🎡 عجلة الحظ</h3><button class="bp-close" id="wheel-close">✕</button></div>
+    <div class="wheel-wrap">
+      <canvas id="wheel-canvas" width="280" height="280"></canvas>
+      <button class="btn-gold" id="wheel-spin">تدوير 🎡</button>
     </div>
   </div>
+</div>
 
-  <!-- ========== LOGIN MODAL ========== -->
-  <div id="login-modal" class="modal-overlay" style="z-index:9999">
-    <div class="login-card">
-      <div class="login-logo">🎙️</div>
-      <h2>VCRM</h2>
-      <p class="login-sub">منصة الغرف الصوتية</p>
-      <input type="text" id="login-username" placeholder="اسم المستخدم" />
-      <input type="text" id="login-emoji" placeholder="اختر أفاتار (إيموجي)" maxlength="2" />
-      <button class="btn-primary btn-full" id="login-btn">دخول 🚀</button>
-      <p class="login-note">لا يُطلب تسجيل – ادخل مباشرة!</p>
+<!-- PK BATTLE -->
+<div id="pk-bar" class="pk-bar hidden">
+  <div class="pk-side pk-red">
+    <div class="pk-room-name" id="pk-r-name">غرفتك</div>
+    <div class="pk-score" id="pk-r-score">0</div>
+  </div>
+  <div class="pk-center">
+    <div class="pk-vs">⚔️</div>
+    <div class="pk-time" id="pk-time">05:00</div>
+  </div>
+  <div class="pk-side pk-blue">
+    <div class="pk-score" id="pk-b-score">0</div>
+    <div class="pk-room-name" id="pk-b-name">المنافس</div>
+  </div>
+  <div class="pk-prog-wrap"><div class="pk-prog" id="pk-prog"></div></div>
+</div>
+
+<!-- CREATE ROOM -->
+<div id="create-room-modal" class="overlay-full hidden">
+  <div class="create-card">
+    <div class="bp-header"><h3>➕ إنشاء غرفة</h3><button class="bp-close" id="cr-close">✕</button></div>
+    <label>اسم الغرفة</label>
+    <input id="cr-name" type="text" placeholder="اسم الغرفة..."/>
+    <label>فئة الغرفة</label>
+    <select id="cr-cat">
+      <option value="hot">🔥 رائجة</option>
+      <option value="music">🎵 موسيقى</option>
+      <option value="pk">⚔️ PK</option>
+      <option value="game">🎮 ألعاب</option>
+      <option value="all">🌐 عامة</option>
+    </select>
+    <label>وصف</label>
+    <input id="cr-desc" type="text" placeholder="وصف مختصر..."/>
+    <label>أيقونة الغرفة</label>
+    <input id="cr-emoji" type="text" placeholder="🌟" maxlength="2"/>
+    <label>نظام الميك</label>
+    <select id="cr-micmode">
+      <option value="chat5">Chat – 5 Mics</option>
+      <option value="broadcast5">Broadcast – 5 Mics</option>
+      <option value="chat10">Chat – 10 Mics</option>
+      <option value="team10">Team – 10 Mics</option>
+    </select>
+    <div class="cr-actions">
+      <button class="btn-outline" id="cr-cancel">إلغاء</button>
+      <button class="btn-primary" id="cr-confirm">إنشاء</button>
     </div>
   </div>
+</div>
 
-  <script src="js/data.js"></script>
-  <script src="js/app.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>

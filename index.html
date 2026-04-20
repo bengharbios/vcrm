@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VCRM – منصة الغرف الصوتية</title>
+  <meta name="description" content="منصة VCRM للغرف الصوتية التفاعلية – دردش، استمع، وشارك مع أصدقائك في غرف حية." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+
+  <!-- ========== SPLASH SCREEN ========== -->
+  <div id="splash" class="splash">
+    <div class="splash-logo">
+      <div class="splash-icon">🎙️</div>
+      <h1 class="splash-title">VCRM</h1>
+      <p class="splash-sub">منصة الغرف الصوتية</p>
+      <div class="splash-bar"><div class="splash-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- ========== APP SHELL ========== -->
+  <div id="app" class="app hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <span class="sidebar-icon">🎙️</span>
+        <span class="sidebar-name">VCRM</span>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-btn active" data-page="rooms" id="nav-rooms">
+          <span class="nav-icon">🏠</span><span class="nav-label">الغرف</span>
+        </button>
+        <button class="nav-btn" data-page="ranking" id="nav-ranking">
+          <span class="nav-icon">🏆</span><span class="nav-label">المتصدرون</span>
+        </button>
+        <button class="nav-btn" data-page="gifts" id="nav-gifts">
+          <span class="nav-icon">🎁</span><span class="nav-label">الهدايا</span>
+        </button>
+        <button class="nav-btn" data-page="wallet" id="nav-wallet">
+          <span class="nav-icon">💰</span><span class="nav-label">المحفظة</span>
+        </button>
+        <button class="nav-btn" data-page="profile" id="nav-profile">
+          <span class="nav-icon">👤</span><span class="nav-label">ملفي</span>
+        </button>
+      </nav>
+      <div class="sidebar-user">
+        <div class="user-avatar" id="sidebar-avatar">😎</div>
+        <div class="user-info">
+          <div class="user-name" id="sidebar-name">أحمد</div>
+          <div class="user-coins"><span>🪙</span><span id="sidebar-coins">12,500</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- ===== PAGE: ROOMS LIST ===== -->
+      <section class="page active" id="page-rooms">
+        <div class="page-header">
+          <h2 class="page-title">الغرف الصوتية</h2>
+          <div class="header-actions">
+            <button class="btn-primary" id="btn-create-room">+ إنشاء غرفة</button>
+            <div class="search-box">
+              <input type="text" placeholder="بحث عن غرفة..." id="room-search" />
+              <span>🔍</span>
+            </div>
+          </div>
+        </div>
+        <div class="category-tabs" id="category-tabs">
+          <button class="cat-tab active" data-cat="all">الكل</button>
+          <button class="cat-tab" data-cat="hot">🔥 رائجة</button>
+          <button class="cat-tab" data-cat="new">✨ جديدة</button>
+          <button class="cat-tab" data-cat="pk">⚔️ PK</button>
+          <button class="cat-tab" data-cat="game">🎮 ألعاب</button>
+          <button class="cat-tab" data-cat="music">🎵 موسيقى</button>
+        </div>
+        <div class="rooms-grid" id="rooms-grid"></div>
+      </section>
+
+      <!-- ===== PAGE: RANKING ===== -->
+      <section class="page" id="page-ranking">
+        <div class="page-header">
+          <h2 class="page-title">🏆 لوحة المتصدرين</h2>
+        </div>
+        <div class="rank-tabs">
+          <button class="rank-tab active" data-rank="richest">أغنى المستخدمين</button>
+          <button class="rank-tab" data-rank="hosts">أفضل المضيفين</button>
+          <button class="rank-tab" data-rank="rooms">أشعل الغرف</button>
+        </div>
+        <div class="ranking-list" id="ranking-list"></div>
+      </section>
+
+      <!-- ===== PAGE: GIFTS STORE ===== -->
+      <section class="page" id="page-gifts">
+        <div class="page-header">
+          <h2 class="page-title">🎁 متجر الهدايا</h2>
+        </div>
+        <div class="gifts-grid" id="gifts-store-grid"></div>
+      </section>
+
+      <!-- ===== PAGE: WALLET ===== -->
+      <section class="page" id="page-wallet">
+        <div class="page-header">
+          <h2 class="page-title">💰 المحفظة</h2>
+        </div>
+        <div class="wallet-card">
+          <div class="wallet-balance">
+            <span class="wallet-label">رصيدك الحالي</span>
+            <div class="wallet-amount"><span>🪙</span><span id="wallet-coins">12,500</span></div>
+          </div>
+          <div class="wallet-diamonds">
+            <span class="wallet-label">الماس</span>
+            <div class="wallet-amount"><span>💎</span><span id="wallet-diamonds">350</span></div>
+          </div>
+        </div>
+        <h3 class="section-title">شحن الرصيد</h3>
+        <div class="recharge-grid" id="recharge-grid"></div>
+        <h3 class="section-title">سجل المعاملات</h3>
+        <div class="tx-list" id="tx-list"></div>
+      </section>
+
+      <!-- ===== PAGE: PROFILE ===== -->
+      <section class="page" id="page-profile">
+        <div class="profile-hero">
+          <div class="profile-cover"></div>
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar" id="profile-avatar-display">😎</div>
+            <div class="profile-level-badge" id="profile-level-badge">VIP 3</div>
+          </div>
+          <div class="profile-details">
+            <h3 id="profile-username">أحمد السلام</h3>
+            <p id="profile-id">ID: #VCR-10021</p>
+            <div class="profile-stats">
+              <div class="stat"><span class="stat-val" id="stat-gifts">1,240</span><span class="stat-lbl">هدايا أُرسلت</span></div>
+              <div class="stat"><span class="stat-val" id="stat-hours">320</span><span class="stat-lbl">ساعة في الغرف</span></div>
+              <div class="stat"><span class="stat-val" id="stat-friends">85</span><span class="stat-lbl">صديق</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="profile-actions">
+          <button class="btn-primary" id="btn-edit-profile">✏️ تعديل الملف</button>
+          <button class="btn-outline" id="btn-logout">🚪 تسجيل الخروج</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ========== VOICE ROOM MODAL ========== -->
+  <div id="room-modal" class="modal-overlay hidden">
+    <div class="room-container">
+
+      <!-- Room Header -->
+      <div class="room-header" id="room-header-bg">
+        <div class="room-header-info">
+          <button class="room-back-btn" id="room-back-btn">←</button>
+          <div class="room-title-wrap">
+            <h3 class="room-title" id="modal-room-title">غرفة النجوم ⭐</h3>
+            <div class="room-meta">
+              <span id="modal-room-id">ID: #1042</span>
+              <span class="room-type-badge" id="modal-room-type">🔥 رائجة</span>
+            </div>
+          </div>
+        </div>
+        <div class="room-header-right">
+          <div class="room-online"><span>👥</span><span id="modal-room-online">128</span></div>
+          <button class="room-share-btn">🔗</button>
+          <button class="room-more-btn" id="room-more-btn">⋮</button>
+        </div>
+      </div>
+
+      <!-- PK Bar (hidden by default) -->
+      <div class="pk-bar hidden" id="pk-bar">
+        <div class="pk-side pk-red">
+          <span class="pk-name" id="pk-name-red">غرفة النجوم</span>
+          <div class="pk-score" id="pk-score-red">0</div>
+        </div>
+        <div class="pk-center">
+          <div class="pk-icon">⚔️</div>
+          <div class="pk-timer" id="pk-timer">05:00</div>
+        </div>
+        <div class="pk-side pk-blue">
+          <div class="pk-score" id="pk-score-blue">0</div>
+          <span class="pk-name" id="pk-name-blue">غرفة القمر</span>
+        </div>
+        <div class="pk-progress-wrap">
+          <div class="pk-progress" id="pk-progress"></div>
+        </div>
+      </div>
+
+      <!-- Host Seat -->
+      <div class="host-seat-area">
+        <div class="host-seat" id="host-seat">
+          <div class="host-avatar" id="host-avatar">👑</div>
+          <div class="host-wave" id="host-wave"></div>
+          <div class="host-name" id="host-name">المضيف</div>
+          <div class="host-level">Lv.15</div>
+        </div>
+      </div>
+
+      <!-- 8 Mic Seats -->
+      <div class="mic-seats-grid" id="mic-seats-grid"></div>
+
+      <!-- Gift Animation Layer -->
+      <div class="gift-anim-layer" id="gift-anim-layer"></div>
+
+      <!-- Broadcast Banner -->
+      <div class="broadcast-banner hidden" id="broadcast-banner">
+        <span id="broadcast-text"></span>
+      </div>
+
+      <!-- Chat Area -->
+      <div class="chat-area" id="chat-area"></div>
+
+      <!-- Bottom Toolbar -->
+      <div class="room-toolbar">
+        <div class="chat-input-wrap">
+          <input type="text" class="chat-input" id="chat-input" placeholder="اكتب رسالتك..." />
+          <button class="send-btn" id="send-btn">إرسال</button>
+        </div>
+        <div class="toolbar-actions">
+          <button class="tool-btn" id="btn-mic" title="الميكروفون">🎤</button>
+          <button class="tool-btn" id="btn-gift" title="إرسال هدية">🎁</button>
+          <button class="tool-btn" id="btn-emoji" title="إيموجي">😊</button>
+          <button class="tool-btn" id="btn-music" title="موسيقى">🎵</button>
+          <button class="tool-btn" id="btn-pk" title="PK">⚔️</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== GIFT PANEL ========== -->
+  <div id="gift-panel" class="panel-overlay hidden">
+    <div class="gift-panel">
+      <div class="panel-header">
+        <h3>🎁 أرسل هدية</h3>
+        <button class="panel-close" id="gift-panel-close">✕</button>
+      </div>
+      <div class="gift-tabs">
+        <button class="gift-tab active" data-gtab="popular">شائعة</button>
+        <button class="gift-tab" data-gtab="luxury">فخمة</button>
+        <button class="gift-tab" data-gtab="special">مميزة</button>
+      </div>
+      <div class="gifts-panel-grid" id="gifts-panel-grid"></div>
+      <div class="gift-footer">
+        <div class="gift-balance">🪙 <span id="gift-balance-val">12,500</span></div>
+        <div class="gift-qty-wrap">
+          <button class="qty-btn" id="qty-minus">−</button>
+          <span id="gift-qty">1</span>
+          <button class="qty-btn" id="qty-plus">+</button>
+        </div>
+        <button class="btn-send-gift" id="btn-send-gift">إرسال</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== EMOJI PANEL ========== -->
+  <div id="emoji-panel" class="panel-overlay hidden">
+    <div class="emoji-panel">
+      <div class="emoji-grid" id="emoji-grid"></div>
+    </div>
+  </div>
+
+  <!-- ========== CREATE ROOM MODAL ========== -->
+  <div id="create-room-modal" class="modal-overlay hidden">
+    <div class="create-room-card">
+      <h3>➕ إنشاء غرفة جديدة</h3>
+      <label>اسم الغرفة</label>
+      <input type="text" id="cr-name" placeholder="أدخل اسم الغرفة..." />
+      <label>نوع الغرفة</label>
+      <select id="cr-type">
+        <option value="hot">🔥 رائجة</option>
+        <option value="music">🎵 موسيقى</option>
+        <option value="game">🎮 ألعاب</option>
+        <option value="pk">⚔️ PK</option>
+        <option value="new">✨ عامة</option>
+      </select>
+      <label>وصف الغرفة</label>
+      <input type="text" id="cr-desc" placeholder="وصف مختصر..." />
+      <label>صورة الغرفة (إيموجي)</label>
+      <input type="text" id="cr-emoji" placeholder="🌟" maxlength="2" />
+      <div class="create-room-actions">
+        <button class="btn-outline" id="cr-cancel">إلغاء</button>
+        <button class="btn-primary" id="cr-confirm">إنشاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== LOGIN MODAL ========== -->
+  <div id="login-modal" class="modal-overlay" style="z-index:9999">
+    <div class="login-card">
+      <div class="login-logo">🎙️</div>
+      <h2>VCRM</h2>
+      <p class="login-sub">منصة الغرف الصوتية</p>
+      <input type="text" id="login-username" placeholder="اسم المستخدم" />
+      <input type="text" id="login-emoji" placeholder="اختر أفاتار (إيموجي)" maxlength="2" />
+      <button class="btn-primary btn-full" id="login-btn">دخول 🚀</button>
+      <p class="login-note">لا يُطلب تسجيل – ادخل مباشرة!</p>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
